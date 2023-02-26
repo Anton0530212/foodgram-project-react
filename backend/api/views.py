@@ -88,18 +88,15 @@ class RecipeViewSet(ModelViewSet):
         final_list = {}
         ingredients = IngredientAmount.objects.filter(
             recipe__carts__user=request.user).values_list(
-            'ingredient__name', 'ingredient__measurement_unit',
-            'amount'
+            'ingredient__name', 'ingredient__measurement_unit').annotate(
+            amount=sum('amount')
         )
         for item in ingredients:
             name = item[0]
-            if name not in final_list:
-                final_list[name] = {
-                    'measurement_unit': item[1],
-                    'amount': item[2]
-                }
-            else:
-                final_list[name]['amount'] += item[2]
+            final_list[name] = {
+                'measurement_unit': item[1],
+                'amount': item[2]
+            }
         pdfmetrics.registerFont(
             TTFont('Handicraft', 'data/Handicraft.ttf', 'UTF-8')
         )

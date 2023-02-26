@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
-# from django.core import validators
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 
 User = get_user_model()
@@ -13,9 +12,15 @@ class Tag(models.Model):
         unique=True,
     )
     color = models.CharField(
-        'HEX-код',
+        'Цвет в HEX',
         max_length=7,
-        unique=True
+        null=True,
+        validators=[
+            RegexValidator(
+                '^#([a-fA-F0-9]{6})',
+                message='Поле должно содержать HEX-код выбранного цвета.'
+            )
+        ]
     )
     slug = models.SlugField(
         'Slug тега',
