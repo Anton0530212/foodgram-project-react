@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv(
     default='rv3hjm63&!x&ldxaru_td_xfee9w%t0d00(rwr9rfuwx*@1jcf'
 )
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -75,7 +75,6 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', default='5432')
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
