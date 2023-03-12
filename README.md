@@ -131,6 +131,20 @@ docker-compose exec backend python manage.py collectstatic --noinput
 Сайт доступен по ссылке:
 [http://158.160.34.14/](http://158.160.34.14/)
 
+## доменное имя
+fhmu8tvjbjoasrvkn30h
+
+## публичный IP
+158.160.34.14
+
+## логин администратора
+
+vasya
+
+## пароль администратора
+
+12345
+
 ## Документация к API
 API документация доступна по ссылке:
 [http://158.160.34.14/api/docs/](http://158.160.34.14/api/docs/)
