@@ -41,9 +41,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
-                  'name', 'is_in_shopping_cart', 'image',
-                  'text', 'cooking_time')
+        fields = '__all__'
 
     def get_ingredients(self, obj):
         queryset = IngredientAmount.objects.filter(recipe=obj)
@@ -83,7 +81,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = '__all__'
+        fields = (
+            'id', 'author', 'ingredients', 'tags', 'image',
+            'name', 'text', 'cooking_time'
+        )
 
     def validate(self, data):
         ingredients = data['ingredients']
