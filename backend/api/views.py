@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
@@ -87,9 +88,9 @@ class RecipeViewSet(ModelViewSet):
     def download_shopping_cart(self, request):
         final_list = {}
         ingredients = IngredientAmount.objects.filter(
-            recipe__carts__user=request.user).values_list(
+            recipe__cart__user=request.user).values_list(
             'ingredient__name', 'ingredient__measurement_unit').annotate(
-            amount=sum('amount')
+            amount=Sum('amount')
         )
         for item in ingredients:
             name = item[0]
