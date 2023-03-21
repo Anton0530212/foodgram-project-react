@@ -22,11 +22,11 @@ from .serializers import (TagSerializer, IngredientSerializer,
 from .permissions import IsAuthorOrReadOnly
 
 
-# class TagsViewSet(ReadOnlyModelViewSet):
-#     queryset = Tag.objects.all()
-#     serializer_class = TagSerializer
-#     permission_classes = (AllowAny,)
-#     pagination_class = None
+class TagsViewSet(ReadOnlyModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = (AllowAny,)
+    pagination_class = None
 
 
 class IngredientViewSet(ReadOnlyModelViewSet):
@@ -116,6 +116,22 @@ class RecipeViewSet(ModelViewSet):
         page.showPage()
         page.save()
         return response
+
+    def list(self, request, *args, **kwargs):
+        if 'tags' not in request.query_params:
+            queryset = Recipe.objects.all()
+        else:
+            queryset = Recipe.objects.all().filter(tags__slug='')
+            for tag in request.query_params.getlist('tags'):
+                queryset |= Recipe.objects.all().filter(tags__slug=tag)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
